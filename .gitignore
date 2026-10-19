@@ -1,0 +1,35 @@
+# Local and generated files
+.DS_Store
+**/.DS_Store
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.log
+*.pid
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+
+# Credentials and runtime state
+.env
+**/.env
+!.env.example
+!**/.env.example
+*.db
+*.db-shm
+*.db-wal
+demo_backend/data/sessions/
+exam_backend/data/
+
+# Large QA outputs and private source material
+artifacts/
+source_assets/
+demo_backend/processed/
+
+# Licensed voice/avatar material is deployed separately from this public repo
+*.wav
+*.mp3
+*.mp4
+*.webm
+

@@ -1,0 +1,22 @@
+{
+  "case_id": "wang_ayi",
+  "name": "王秀兰",
+  "display_name": "王阿姨",
+  "age": 68,
+  "tags": ["2型糖尿病", "焦虑型", "沟通训练·初级"],
+  "difficulty": 2,
+  "order": 1,
+  "available": true,
+  "brief": "2型糖尿病12年，近1月足部麻木、视物模糊，情绪焦虑",
+  "goals": ["完成病史采集与情绪安抚", "进行糖尿病饮食与足部护理宣教", "识别并回应患者的疾病误解"],
+  "avatar_id": "wang_ayi",
+  "avatar_provider": "soulx",
+  "tts_voice": "zh-CN-XiaoyiNeural",
+  "poster": "/demo/assets/wang-ayi.png",
+  "poster_alt": "王阿姨躺在病床上",
+  "care_context": "住院患者 / 标准化病人",
+  "report_subtitle": "2型糖尿病 · 焦虑型",
+  "greeting": "哎……护士来了啊。",
+  "greeting_emotion": "焦虑",
+  "system_prompt_file": "prompts/wang_ayi_system.txt"
+}

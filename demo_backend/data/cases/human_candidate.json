@@ -1,0 +1,22 @@
+{
+  "case_id": "human_candidate",
+  "name": "林浩",
+  "display_name": "林先生",
+  "age": 24,
+  "tags": ["阑尾切除术后", "疼痛焦虑型", "沟通训练·初级"],
+  "difficulty": 2,
+  "order": 2,
+  "available": true,
+  "brief": "腹腔镜阑尾切除术后第1天，切口疼痛，因担心伤口裂开而不敢翻身下床",
+  "goals": ["完成疼痛与术后不适评估", "回应患者对伤口裂开的担忧", "用通俗语言说明安全活动与伤口观察要点"],
+  "avatar_id": "human_candidate",
+  "avatar_provider": "soulx",
+  "tts_voice": "zh-CN-YunxiNeural",
+  "poster": "/demo/assets/lin-hao.jpg",
+  "poster_alt": "年轻男性标准化病人林先生",
+  "care_context": "术后患者 / 标准化病人",
+  "report_subtitle": "阑尾切除术后 · 疼痛焦虑型",
+  "greeting": "护士，我这伤口还是疼，我都不敢动……动了会不会裂开啊？",
+  "greeting_emotion": "焦虑",
+  "system_prompt_file": "prompts/lin_hao_system.txt"
+}

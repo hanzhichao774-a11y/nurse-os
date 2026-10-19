@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="description" content="高校教师资格笔试刷题工具，支持顺序练习、随机练习、模拟考试、错题本与收藏。" />
+    <title>师证通 · 高校教师资格刷题</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23115e59'/%3E%3Cpath d='m10 23 22-10 22 10-22 10-22-10Zm10 8v13c0 4 5 7 12 7s12-3 12-7V31' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell" aria-live="polite">
+      <header class="topbar">
+        <button id="brandButton" class="brand" type="button" aria-label="返回首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m3 7.5 9-4 9 4-9 4-9-4Z"/><path d="M7 9.3v5.2c0 1.3 2.2 2.5 5 2.5s5-1.2 5-2.5V9.3M20 9v6"/></svg>
+          </span>
+          <span><strong>师证通</strong><small>高校教师资格刷题</small></span>
+        </button>
+        <button id="headerAction" class="account-button hidden" type="button" aria-label="打开账户设置">
+          <span id="userInitial" class="user-initial">用</span>
+          <span id="headerUsername">我的账户</span>
+          <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+        </button>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <section id="loadingView" class="loading-view">
+          <div class="loader" aria-hidden="true"></div>
+          <p>正在加载题库…</p>
+        </section>
+
+        <section id="authView" class="auth-view hidden">
+          <div class="auth-layout">
+            <div class="auth-intro">
+              <span class="eyebrow">高校教师资格笔试</span>
+              <h1>把每一次练习，<br />都变成自己的积累</h1>
+              <p>登录后，错题、收藏、练习进度和未完成的答题记录都会安全地保存在你的账户中。</p>
+              <div class="auth-features">
+                <span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>1954 道完整题库</span>
+                <span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>多设备独立进度</span>
+                <span><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>7 天免登录</span>
+              </div>
+            </div>
+            <div class="auth-card">
+              <div class="auth-tabs" role="tablist">
+                <button id="loginTab" class="active" type="button" role="tab" aria-selected="true">登录</button>
+                <button id="registerTab" type="button" role="tab" aria-selected="false">注册</button>
+              </div>
+              <form id="loginForm" class="auth-form">
+                <div><span class="eyebrow">欢迎回来</span><h2>登录师证通</h2><p>继续上一次的学习进度</p></div>
+                <label>用户名<input id="loginUsername" name="username" autocomplete="username" minlength="3" maxlength="20" required placeholder="请输入用户名" /></label>
+                <label>密码<input id="loginPassword" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required placeholder="请输入密码" /></label>
+                <p id="loginError" class="form-error hidden" role="alert"></p>
+                <button id="loginButton" class="button primary full" type="submit">登录</button>
+                <small>登录状态将在当前设备保留 7 天</small>
+              </form>
+              <form id="registerForm" class="auth-form hidden">
+                <div><span class="eyebrow">首次使用</span><h2>创建学习账户</h2><p>一个邀请码仅可注册一个账户</p></div>
+                <label>用户名<input id="registerUsername" name="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_\u4e00-\u9fff]{3,20}" required placeholder="3–20 位中文、字母或数字" /></label>
+                <label>密码<input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required placeholder="至少 8 位" /></label>
+                <label>确认密码<input id="registerPasswordConfirm" name="passwordConfirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required placeholder="再次输入密码" /></label>
+                <label>邀请码<input id="invitationCode" name="invitationCode" autocomplete="off" required placeholder="TEACH-XXXX-XXXX" /></label>
+                <p id="registerError" class="form-error hidden" role="alert"></p>
+                <button id="registerButton" class="button primary full" type="submit">注册并进入</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="homeView" class="view hidden">
+          <div class="home-grid">
+            <div class="home-main">
+              <section class="hero-card">
+                <div>
+                  <span class="eyebrow">今日练习</span>
+                  <h1>稳步刷题，掌握每个考点</h1>
+                  <p id="heroCopy">题库已就绪，从一组练习开始吧。</p>
+                </div>
+                <div class="hero-ring" aria-label="总练习进度">
+                  <svg viewBox="0 0 80 80" aria-hidden="true">
+                    <circle class="ring-track" cx="40" cy="40" r="32"/>
+                    <circle id="progressRing" class="ring-value" cx="40" cy="40" r="32"/>
+                  </svg>
+                  <strong id="progressPercent">0%</strong>
+                  <span>已练习</span>
+                </div>
+              </section>
+
+              <button id="continueCard" class="continue-card hidden" type="button">
+                <span class="continue-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/></svg>
+                </span>
+                <span class="continue-copy"><small>继续上次</small><strong id="continueTitle">顺序练习</strong><em id="continueMeta">第 1 / 100 题</em></span>
+                <svg class="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+              </button>
+
+              <section class="section-block">
+                <div class="section-heading"><div><span class="eyebrow">练习模式</span><h2>选择刷题方式</h2></div></div>
+                <div class="mode-grid">
+                  <button class="mode-card mode-primary" type="button" data-mode="sequential">
+                    <span class="mode-icon"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg></span>
+                    <span><strong>顺序练习</strong><small>按题库顺序逐题掌握</small></span>
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+                  </button>
+                  <button class="mode-card" type="button" data-mode="random">
+                    <span class="mode-icon amber"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></span>
+                    <span><strong>随机练习</strong><small>打乱题目，检验薄弱点</small></span>
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+                  </button>
+                  <button class="mode-card" type="button" data-mode="exam">
+                    <span class="mode-icon blue"><svg viewBox="0 0 24 24"><path d="M9 5h6M9 3h6v4H9zM7 5H5v16h14V5h-2M8 11h8M8 15h8"/></svg></span>
+                    <span><strong>模拟考试</strong><small>限时答题，交卷后统一判分</small></span>
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </section>
+
+              <section class="section-block">
+                <div class="section-heading"><div><span class="eyebrow">专项练习</span><h2>按科目巩固</h2></div><span id="totalBadge" class="count-badge">1954 题</span></div>
+                <div id="subjectList" class="subject-list"></div>
+              </section>
+            </div>
+
+            <aside class="home-aside">
+              <section class="stats-card">
+                <div class="section-heading compact"><div><span class="eyebrow">学习数据</span><h2>练习概览</h2></div></div>
+                <div class="stats-grid">
+                  <div><strong id="attemptedStat">0</strong><span>已练题数</span></div>
+                  <div><strong id="accuracyStat">—</strong><span>累计正确率</span></div>
+                  <div><strong id="wrongStat">0</strong><span>当前错题</span></div>
+                  <div><strong id="favoriteStat">0</strong><span>收藏题目</span></div>
+                </div>
+              </section>
+              <section class="tip-card">
+                <svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M8.5 14.5a7 7 0 1 1 7 0c-.8.7-1.2 1.5-1.3 2.5H9.8c-.1-1-.5-1.8-1.3-2.5Z"/></svg>
+                <div><strong>刷题建议</strong><p>先完成章节练习，再通过错题本反复巩固，效果更稳定。</p></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section id="questionView" class="view question-view hidden">
+          <div class="question-layout">
+            <article class="question-panel">
+              <div class="session-head">
+                <button id="exitSession" class="icon-button back-button" type="button" aria-label="退出练习"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+                <div><strong id="sessionTitle">顺序练习</strong><span id="sessionSubtitle">全部科目</span></div>
+                <div id="examTimer" class="timer hidden"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span>90:00</span></div>
+                <button id="mobilePalette" class="icon-button mobile-palette" type="button" aria-label="打开答题卡"><svg viewBox="0 0 24 24"><path d="M5 5h4v4H5zM15 5h4v4h-4zM5 15h4v4H5zM15 15h4v4h-4z"/></svg></button>
+              </div>
+              <div class="progress-line"><i id="sessionProgress"></i></div>
+
+              <div class="question-content">
+                <div class="question-meta">
+                  <span id="questionType" class="type-pill">单选题</span>
+                  <span id="questionSubject">高等教育学</span>
+                  <button id="favoriteButton" class="favorite-button" type="button" aria-label="收藏本题">
+                    <svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3L7.5 14 3 9.6l6.2-.9L12 3Z"/></svg>
+                  </button>
+                </div>
+                <div class="question-number"><strong id="currentNumber">1</strong><span id="questionTotal">/ 100</span></div>
+                <h1 id="questionPrompt">题目加载中</h1>
+                <p id="answerHint" class="answer-hint">请选择一个答案</p>
+                <div id="optionList" class="option-list"></div>
+
+                <div id="feedbackCard" class="feedback-card hidden">
+                  <div class="feedback-head"><span id="feedbackIcon"></span><strong id="feedbackTitle"></strong></div>
+                  <div class="answer-row"><span>正确答案</span><strong id="correctAnswer"></strong></div>
+                  <div class="answer-row"><span>你的答案</span><strong id="yourAnswer"></strong></div>
+                  <p>本题库未提供文字解析，建议结合教材复习对应知识点。</p>
+                </div>
+              </div>
+
+              <div class="question-actions">
+                <button id="previousButton" class="button secondary" type="button"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>上一题</button>
+                <button id="confirmButton" class="button primary hidden" type="button">确认答案</button>
+                <button id="nextButton" class="button primary" type="button">下一题<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+              </div>
+            </article>
+
+            <aside class="session-aside">
+              <div class="aside-card">
+                <div class="aside-title"><strong>答题进度</strong><button id="openPalette" type="button">查看答题卡</button></div>
+                <div class="aside-stats"><div><strong id="answeredCount">0</strong><span>已答</span></div><div><strong id="correctCount">0</strong><span>答对</span></div><div><strong id="remainingCount">0</strong><span>剩余</span></div></div>
+                <div class="legend"><span><i class="dot current"></i>当前</span><span><i class="dot answered"></i>已答</span><span><i class="dot blank"></i>未答</span></div>
+              </div>
+              <button id="submitExamAside" class="button danger-outline hidden" type="button">提前交卷</button>
+            </aside>
+          </div>
+        </section>
+
+        <section id="collectionView" class="view collection-view hidden">
+          <div class="page-heading"><div><span id="collectionEyebrow" class="eyebrow">复习巩固</span><h1 id="collectionTitle">错题本</h1><p id="collectionDescription">集中复习做错的题目</p></div><span id="collectionCount" class="large-count">0</span></div>
+          <div id="collectionFilters" class="filter-tabs"></div>
+          <div id="collectionList" class="collection-list"></div>
+          <div id="collectionEmpty" class="empty-state hidden">
+            <span><svg viewBox="0 0 24 24"><path d="M8 6h8M8 10h8M8 14h5M6 3h12a2 2 0 0 1 2 2v16l-4-3-4 3-4-3-4 3V5a2 2 0 0 1 2-2Z"/></svg></span>
+            <h2>这里还没有题目</h2><p>完成练习后，相关题目会自动整理到这里。</p>
+            <button class="button primary" type="button" data-go-home>开始练习</button>
+          </div>
+        </section>
+
+        <section id="statsView" class="view stats-view hidden">
+          <div class="page-heading"><div><span class="eyebrow">学习报告</span><h1>我的进度</h1><p>查看各科掌握情况，安排下一轮复习。</p></div></div>
+          <div id="statsOverview" class="report-overview"></div>
+          <section class="report-card"><div class="section-heading compact"><div><span class="eyebrow">科目进度</span><h2>掌握概览</h2></div></div><div id="subjectProgress" class="progress-list"></div></section>
+          <section class="report-card settings-card"><div><strong>账户学习数据</strong><p>错题、收藏与进度已按当前用户保存在服务器。</p></div><button id="resetData" class="button text-danger" type="button">清空数据</button></section>
+        </section>
+
+        <section id="resultView" class="view result-view hidden">
+          <div class="result-card">
+            <div id="resultBadge" class="result-badge"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
+            <span class="eyebrow">本次练习完成</span>
+            <h1 id="resultHeadline">完成得不错</h1>
+            <p id="resultSummary">继续保持练习节奏</p>
+            <div class="score-ring"><strong id="resultScore">0</strong><span>正确率</span></div>
+            <div class="result-stats"><div><strong id="resultCorrect">0</strong><span>答对</span></div><div><strong id="resultWrong">0</strong><span>答错</span></div><div><strong id="resultDuration">00:00</strong><span>用时</span></div></div>
+            <div class="result-actions"><button id="reviewWrong" class="button secondary" type="button">查看错题</button><button id="resultHome" class="button primary" type="button">返回首页</button></div>
+          </div>
+        </section>
+      </main>
+
+      <nav id="bottomNav" class="bottom-nav hidden" aria-label="主要导航">
+        <button class="active" type="button" data-page="home"><svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>首页</span></button>
+        <button type="button" data-page="wrong"><svg viewBox="0 0 24 24"><path d="M12 8v5M12 17h.01M10.3 3.8 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg><span>错题</span><i id="wrongBadge" class="nav-badge hidden">0</i></button>
+        <button type="button" data-page="favorite"><svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3L7.5 14 3 9.6l6.2-.9L12 3Z"/></svg><span>收藏</span></button>
+        <button type="button" data-page="stats"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>进度</span></button>
+      </nav>
+    </div>
+
+    <dialog id="setupDialog" class="modal setup-modal">
+      <form method="dialog">
+        <div class="modal-head"><div><span class="eyebrow">练习设置</span><h2 id="setupTitle">顺序练习</h2></div><button class="icon-button" value="cancel" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+        <div class="form-group"><label>练习科目</label><div id="subjectOptions" class="choice-chips"></div></div>
+        <div class="form-group"><label>题目类型</label><div id="typeOptions" class="choice-chips"></div></div>
+        <div class="form-group"><label>本次题量</label><div id="countOptions" class="choice-chips"></div></div>
+        <p id="setupNote" class="setup-note"></p>
+        <button id="startButton" class="button primary full" type="button">开始练习</button>
+      </form>
+    </dialog>
+
+    <dialog id="paletteDialog" class="modal palette-modal">
+      <div class="modal-head"><div><span class="eyebrow">答题进度</span><h2>答题卡</h2></div><button id="closePalette" class="icon-button" type="button" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="legend"><span><i class="dot current"></i>当前</span><span><i class="dot answered"></i>已答</span><span><i class="dot blank"></i>未答</span></div>
+      <div id="paletteGrid" class="palette-grid"></div>
+      <button id="submitExamPalette" class="button primary full hidden" type="button">交卷并查看成绩</button>
+    </dialog>
+
+    <dialog id="confirmDialog" class="modal confirm-modal">
+      <div class="confirm-icon"><svg viewBox="0 0 24 24"><path d="M12 8v5M12 17h.01M10.3 3.8 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg></div>
+      <h2 id="confirmTitle">确认退出？</h2><p id="confirmMessage">当前进度会自动保存，下次可以继续。</p>
+      <div class="confirm-actions"><button id="confirmCancel" class="button secondary" type="button">取消</button><button id="confirmAccept" class="button danger" type="button">确认</button></div>
+    </dialog>
+
+    <dialog id="accountDialog" class="modal account-modal">
+      <div class="modal-head"><div><span class="eyebrow">当前账户</span><h2 id="accountUsername">用户名</h2></div><button id="closeAccount" class="icon-button" type="button" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="account-session"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><div><strong>登录状态安全有效</strong><p id="accountExpiry">有效期至 —</p></div></div>
+      <div class="account-actions"><button id="accountStats" class="button secondary" type="button">查看学习进度</button><button id="logoutButton" class="button text-danger" type="button">退出登录</button></div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
