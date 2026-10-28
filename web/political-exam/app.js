@@ -129,6 +129,7 @@
     sanitizeStoredData();
     els.authView.classList.add("hidden");
     els.headerAction.classList.remove("hidden");
+    els.desktopNav.classList.remove("hidden");
     els.headerUsername.textContent = currentUser.username;
     els.userInitial.textContent = [...currentUser.username][0] || "用";
     els.bottomNav.classList.remove("hidden");
@@ -145,6 +146,7 @@
     syncedRevision = 0;
     ["homeView", "questionView", "collectionView", "statsView", "resultView", "loadingView"].forEach((id) => els[id].classList.add("hidden"));
     els.bottomNav.classList.add("hidden");
+    els.desktopNav.classList.add("hidden");
     els.headerAction.classList.add("hidden");
     els.authView.classList.remove("hidden");
     switchAuthMode(mode);
@@ -180,6 +182,10 @@
     document.querySelectorAll("[data-mode]").forEach((button) => button.addEventListener("click", () => openSetup(button.dataset.mode)));
     document.querySelectorAll("[data-go-home]").forEach((button) => button.addEventListener("click", () => showPage("home")));
     els.bottomNav.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-page]");
+      if (button) leaveFor(button.dataset.page);
+    });
+    els.desktopNav.addEventListener("click", (event) => {
       const button = event.target.closest("[data-page]");
       if (button) leaveFor(button.dataset.page);
     });
@@ -344,6 +350,7 @@
     ["homeView", "questionView", "collectionView", "statsView", "resultView"].forEach((id) => els[id].classList.add("hidden"));
     const navPage = page === "wrong" || page === "favorite" ? page : page === "stats" ? "stats" : "home";
     document.querySelectorAll("#bottomNav button").forEach((button) => button.classList.toggle("active", button.dataset.page === navPage));
+    document.querySelectorAll("#desktopNav button").forEach((button) => button.classList.toggle("active", button.dataset.page === navPage));
     els.bottomNav.classList.toggle("hidden", page === "question" || page === "result");
     if (page === "home") {
       renderHome();
@@ -393,6 +400,8 @@
     els.favoriteStat.textContent = profile.favorites.length;
     els.wrongBadge.textContent = profile.wrong.length > 99 ? "99+" : profile.wrong.length;
     els.wrongBadge.classList.toggle("hidden", !profile.wrong.length);
+    els.wrongDesktopBadge.textContent = profile.wrong.length > 99 ? "99+" : profile.wrong.length;
+    els.wrongDesktopBadge.classList.toggle("hidden", !profile.wrong.length);
     els.totalBadge.textContent = `${bank.meta.total} 题`;
     els.heroCopy.textContent = attempted ? `已完成 ${attempted} 道题，今天继续巩固薄弱知识点。` : `完整收录 ${bank.meta.total} 道题，从第一组练习开始。`;
 
