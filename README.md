@@ -2,7 +2,7 @@
 
 依据 [需求文档](./护语者Demo需求文档.md)实现的护患沟通实训：选病例、与王阿姨实时对话、查看五维评分报告。患者只使用固定病例信息，不提供诊断或用药建议。
 
-同一服务器还部署了独立的高校教师资格笔试刷题工具，两个应用互不影响。
+项目还包含独立的高校教师资格和政工师刷题工具，各应用的数据与服务互不影响。
 
 ## 打开演示
 
@@ -19,6 +19,16 @@
 - 使用邀请码注册和用户名密码登录；Cookie 有效期 7 天，并启用 `HttpOnly`、`Secure`、`SameSite=Lax`。
 - 错题、收藏、进度及未完成练习保存在服务器并按用户 ID 隔离。邀请码应在部署环境中生成和保管。
 - 题库转换脚本为 `deployment/parse_exam_workbook.py`。
+
+## 政工师刷题工具
+
+- 公网入口：`/political-exam/`，接口路径为 `/api/political-exam/`。
+- 三份 Word 题库共转换 660 题：填空题 232 题、单选题 272 题、多选题 156 题。
+- 覆盖党的二十大报告、党的二十届四中全会《建议》、党章、宪法、爱国主义教育法、思想政治工作条例、政绩观学习教育与河北省委全会七个模块。
+- 支持顺序练习、随机练习、模拟考试、答题卡、错题本、收藏、进度统计和断点续练。
+- 用户名和密码可直接注册，无需邀请码；Cookie 默认有效期 7 天。
+- 使用独立的 `political-exam` 服务、Cookie 和 SQLite 数据库，用户只能读取自己的学习数据。
+- Word 转换脚本为 `deployment/parse_political_exam_docx.py`。填空题答案取自下划线文字，单选与多选答案取自原文括号标记；因源文件未提供干扰项，脚本从同一知识模块的答案中确定性生成选项。
 
 ## 当前版本的数字人
 
@@ -50,6 +60,8 @@ SoulX Lite 输出为固定 512×512 头肩画面，不能等同全身动作或�
 | 页面和播放器 | `web/demo/` | `/root/LiveTalking/web/demo/` |
 | 教资刷题页面和题库 | `web/exam/` | `/root/LiveTalking/web/exam/` |
 | 教资账户与用户数据服务 | `exam_backend/` | `/root/exam_backend/` |
+| 政工师刷题页面和题库 | `web/political-exam/` | `/var/www/nurse/political-exam/` |
+| 政工师账户与用户数据服务 | `political_exam_backend/` | `/opt/political-exam/backend/` |
 | 对话、病例和评分 | `demo_backend/` | `/root/demo_backend/` |
 | LiveTalking 音画修复及启动脚本 | `deployment/` | `/root/LiveTalking/`、`/root/start.sh` |
 | 录屏和验收数据 | `artifacts/` | `/root/demo_backend/artifacts/`（最终三分钟录屏） |
